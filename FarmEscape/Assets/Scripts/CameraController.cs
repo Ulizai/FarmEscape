@@ -1,18 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class CameraController : MonoBehaviour {
-
+public class CameraController : MonoBehaviour
+{
     public GameObject[] mustHaveInView;
-    public GameObject car;
     public float zoomSpeed;
+    public float minCameraDistance;
+    public float maxCameraDistance;
+
+    protected GameObject car;
 
     protected Camera cam;
 	// Use this for initialization
 	void Start () {
         cam = GetComponent<Camera>();
+        car = GameObject.FindGameObjectWithTag(TagManager.PLAYER_VEHICLE);
 	}
 	
 	// Update is called once per frame
@@ -62,7 +64,7 @@ public class CameraController : MonoBehaviour {
 
         float fitXHeight = FitX(mustSeeArea,fovX);
         float fitZHeight = FitZ(mustSeeArea,fovZ);
-        float height = Mathf.Max(fitXHeight, fitZHeight);
+        float height = Mathf.Clamp(Mathf.Max(fitXHeight, fitZHeight), minCameraDistance, maxCameraDistance);
 
         newPosition.y = Mathf.Lerp(transform.position.y, height, zoomSpeed * Time.deltaTime);
         transform.position = newPosition;

@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PlayerVehicle
+  - Checkpoint 1
+  - Checkpoint 2
+  - Checkpoint 3
   layers:
   - Default
   - TransparentFX
