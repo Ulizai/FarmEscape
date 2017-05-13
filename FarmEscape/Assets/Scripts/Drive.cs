@@ -14,18 +14,16 @@ public class Drive : MonoBehaviour {
 
     public List<AxelInfo> motorAxels;
     public List<AxelInfo> freeAxels;
-    public float maxMotorTorque; 
+    public float maxMotorTorque;
+    public float boostImpulse;
     public float maxSteeringAngle;
+    public float downForce;
+    public float accelerometerSensitivity = 3;
 
     protected Rigidbody theRigid;
 
     void Start () {
         theRigid = GetComponent<Rigidbody>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 
     public void ApplyLocalPositionToVisuals(WheelCollider collider)
@@ -45,12 +43,20 @@ public class Drive : MonoBehaviour {
         visualWheel.transform.rotation = rotation;
     }
 
+    public void Boost()
+    {
+        theRigid.AddForce(transform.forward * boostImpulse, ForceMode.Impulse);
+    }
+
     private void FixedUpdate()
     {
         float motor = maxMotorTorque; ///AutoAccelerate
-        ///Steer
+                                      ///Steer 
+#if (UNITY_ANDROID || UNITY_IOS) && (!UNITY_EDITOR)
+        float steering = Mathf.Clamp(accelerometerSensitivity * maxSteeringAngle * Input.acceleration.x,-maxSteeringAngle,maxSteeringAngle);
+#else
         float steering = maxSteeringAngle * Input.GetAxis("Horizontal");
-
+#endif
         foreach (AxelInfo axleInfo in motorAxels)
         {
             if (axleInfo.steering)
@@ -73,7 +79,7 @@ public class Drive : MonoBehaviour {
             ApplyLocalPositionToVisuals(axelInfo.rightWheel);
         }
 
-        theRigid.AddForce(Vector3.down * theRigid.velocity.magnitude*500);
+        theRigid.AddForce(Vector3.down * theRigid.velocity.magnitude*downForce);
 
     }
 }

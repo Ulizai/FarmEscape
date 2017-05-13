@@ -3,10 +3,13 @@
 public class LevelProgressManager : MonoBehaviour {
     public int checkPoints = 3;
     public int mustHaveInViewCheckpoints = 2;
+    public float[] times;
 
+    public GameObject[] stars;
     protected bool[] checkpointsCrossed;
     protected GameObject[] checkpointObjects;
     protected CameraController cameraControl;
+    protected Timer timer;
 
 	// Use this for initialization
 	void Start () {
@@ -14,6 +17,9 @@ public class LevelProgressManager : MonoBehaviour {
         {
             Debug.LogError("You are trying to use more checkpoints than created, please create more checkpoint objects and tags");
         }
+
+        cameraControl = FindObjectOfType<CameraController>();
+        timer = FindObjectOfType<Timer>();
 
         checkpointsCrossed = new bool[checkPoints];
         checkpointObjects = new GameObject[checkPoints];
@@ -23,7 +29,11 @@ public class LevelProgressManager : MonoBehaviour {
             checkpointObjects[index] = GameObject.FindGameObjectWithTag(TagManager.CHECKPOINTS[index]);
         }
 
-        cameraControl = FindObjectOfType<CameraController>();
+        stars = new GameObject[TagManager.STARS.Length];
+        for (int index = 0; index < stars.Length; ++index)
+        {
+            stars[index] = GameObject.FindGameObjectWithTag(TagManager.STARS[index]);
+        }
 
         GameObject[] mushHaveInViewObjects = new GameObject[mustHaveInViewCheckpoints];
         for (int index = 0; index< mustHaveInViewCheckpoints; ++index)
@@ -32,7 +42,7 @@ public class LevelProgressManager : MonoBehaviour {
         }
 
         cameraControl.mustHaveInView = mushHaveInViewObjects;
-	}
+    }
 	
     public void CheckpointCrossed(int checkpointIndex)
     {
@@ -47,13 +57,17 @@ public class LevelProgressManager : MonoBehaviour {
             }
         }
 
-        if (allPreviousPassed)
+        if ((allPreviousPassed)&&(!checkpointsCrossed[checkpointIndex]))
         {
             checkpointsCrossed[checkpointIndex] = true;
             if (checkpointIndex == checkpointsCrossed.Length - 1)
             {
-                Win();
+                Win(timer.GetCurrent());
             }
+        }
+        else
+        {
+            return;
         }
 
         GameObject[] newList = null;
@@ -77,13 +91,39 @@ public class LevelProgressManager : MonoBehaviour {
         cameraControl.mustHaveInView = newList;
     }
 
-    protected void Win()
+    protected void Win(float winTime)
     {
-        Debug.Log("And you win");
+        timer.Stopped = true;
+        int starCount = stars.Length;
+        for (int index = 0; index < stars.Length - 1; ++index)
+        {
+            if (winTime < times[index])
+            {
+                break;
+            }
+            else
+            {
+                --starCount;
+            }
+        }
+        Debug.Log("And you win : " + starCount);
     }
 
-	// Update is called once per frame
 	void Update () {
-		
+        if (!timer.Stopped)
+        {
+            float currentTime = timer.GetCurrent();
+            for (int index = 0; index < stars.Length - 1; ++index)
+            {
+                if (currentTime > times[index])
+                {
+                    stars[index].SetActive(false);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
 	}
 }

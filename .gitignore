@@ -1,6 +1,7 @@
 *.csproj
 *.sln
 *.suo
+*.apk
 
 */Library/*
 */Temp/*
