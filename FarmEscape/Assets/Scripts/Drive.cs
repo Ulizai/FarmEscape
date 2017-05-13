@@ -14,17 +14,27 @@ public class Drive : MonoBehaviour {
 
     public List<AxelInfo> motorAxels;
     public List<AxelInfo> freeAxels;
+    public ParticleSystem[] skidParticles;
     public float maxMotorTorque;
     public float boostImpulse;
     public float maxSteeringAngle;
     public float downForce;
     public float accelerometerSensitivity = 3;
+    public float skidAngle = 30;
 
     protected Rigidbody theRigid;
+    protected TrailEmitter[] trails;
+    protected ParticleSystem eggCannon;
 
     void Start () {
         theRigid = GetComponent<Rigidbody>();
-	}
+        trails = GetComponentsInChildren<TrailEmitter>();
+        eggCannon = GetComponent<ParticleSystem>();
+        foreach (ParticleSystem particle in skidParticles)
+        {
+            particle.Stop();
+        }
+    }
 
     public void ApplyLocalPositionToVisuals(WheelCollider collider)
     {
@@ -43,13 +53,60 @@ public class Drive : MonoBehaviour {
         visualWheel.transform.rotation = rotation;
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        switch(other.gameObject.tag)
+        {
+            case TagManager.OIL_SPIL:
+                gameObject.AddComponent<OilSpil>();
+                break;
+            case TagManager.ICE_ICE_BABY:
+                gameObject.AddComponent<Ice>();
+                break;
+        }
+    }
+
     public void Boost()
     {
         theRigid.AddForce(transform.forward * boostImpulse, ForceMode.Impulse);
+        eggCannon.Play();
     }
 
     private void FixedUpdate()
     {
+        foreach(TrailEmitter emitter in trails)
+        {
+            if (emitter.transform.position.y < transform.position.y)
+            {
+                emitter.EndTrail(); ///Temporary hack to be fixed in v1.1. Check if wheelCollider grounded.
+            }
+        }
+
+        if (Mathf.Abs(Vector3.Angle(theRigid.velocity,transform.forward)) > skidAngle)
+        {
+            foreach(TrailEmitter trail in trails)
+            {
+                if (!trail.Active)
+                {
+                    trail.NewTrail();
+                    foreach (ParticleSystem particle in skidParticles)
+                    {
+                        particle.Play();
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (TrailEmitter trail in trails)
+            {
+                trail.EndTrail();
+                foreach (ParticleSystem particle in skidParticles)
+                {
+                    particle.Stop();
+                }
+            }
+        }
         float motor = maxMotorTorque; ///AutoAccelerate
                                       ///Steer 
 #if (UNITY_ANDROID || UNITY_IOS) && (!UNITY_EDITOR)
@@ -79,7 +136,7 @@ public class Drive : MonoBehaviour {
             ApplyLocalPositionToVisuals(axelInfo.rightWheel);
         }
 
-        theRigid.AddForce(Vector3.down * theRigid.velocity.magnitude*downForce);
-
+        theRigid.AddForceAtPosition(Vector3.down * theRigid.velocity.magnitude * downForce, transform.position + transform.right);
+        theRigid.AddForceAtPosition(Vector3.down * theRigid.velocity.magnitude * downForce, transform.position - transform.right);
     }
 }

@@ -1,18 +1,27 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(MarkCheckpoints))]
 public class LevelProgressManager : MonoBehaviour {
     public int checkPoints = 3;
     public int mustHaveInViewCheckpoints = 2;
     public float[] times;
 
     public GameObject[] stars;
+    protected MarkCheckpoints checkpointMarker;
     protected bool[] checkpointsCrossed;
     protected GameObject[] checkpointObjects;
     protected CameraController cameraControl;
     protected Timer timer;
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+        cameraControl = FindObjectOfType<CameraController>();
+        timer = FindObjectOfType<Timer>();
+        checkpointMarker = GetComponent<MarkCheckpoints>();
+    }
+
+    // Use this for initialization
+    void Start () {
         PlayerPrefs.SetString(PlayerPrefKeys.LAST_LEVEL, UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         FadeToBlack ftb = FindObjectOfType<FadeToBlack>();
         if (ftb)
@@ -24,9 +33,6 @@ public class LevelProgressManager : MonoBehaviour {
         {
             Debug.LogError("You are trying to use more checkpoints than created, please create more checkpoint objects and tags");
         }
-
-        cameraControl = FindObjectOfType<CameraController>();
-        timer = FindObjectOfType<Timer>();
 
         checkpointsCrossed = new bool[checkPoints];
         checkpointObjects = new GameObject[checkPoints];
@@ -71,6 +77,7 @@ public class LevelProgressManager : MonoBehaviour {
             {
                 Win(timer.GetCurrent());
             }
+            checkpointMarker.Cleared(checkpointIndex);
         }
         else
         {

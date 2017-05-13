@@ -11,7 +11,8 @@ TagManager:
   - Star 1
   - Star 2
   - Star 3
-  - PauseMenu
+  - OilSpil
+  - Ice
   layers:
   - Default
   - TransparentFX
