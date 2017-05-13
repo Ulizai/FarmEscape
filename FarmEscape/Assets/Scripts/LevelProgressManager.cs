@@ -13,6 +13,13 @@ public class LevelProgressManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        PlayerPrefs.SetString(PlayerPrefKeys.LAST_LEVEL, UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        FadeToBlack ftb = FindObjectOfType<FadeToBlack>();
+        if (ftb)
+        {
+            ftb.UnFade();
+        } 
+
         if (checkPoints > TagManager.CHECKPOINTS.Length)
         {
             Debug.LogError("You are trying to use more checkpoints than created, please create more checkpoint objects and tags");
@@ -89,6 +96,17 @@ public class LevelProgressManager : MonoBehaviour {
             }
         }
         cameraControl.mustHaveInView = newList;
+    }
+    public void Paused(bool newState)
+    {
+        if (newState)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
     }
 
     protected void Win(float winTime)
