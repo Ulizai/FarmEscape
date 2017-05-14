@@ -28,7 +28,7 @@ public class MarkCheckpoints : MonoBehaviour {
 	public void Cleared(int index)
     {
         SetMaterialToChildren(checkpointObjects[index], checkpointClearedMaterial);
-        if (index<checkpointObjects.Length)
+        if (index+1<checkpointObjects.Length)
         {
             SetMaterialToChildren(checkpointObjects[index + 1], checkpointNextMaterial);
         }

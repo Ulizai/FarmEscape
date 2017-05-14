@@ -205,6 +205,30 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1206609296243536, guid: b6a385f9c12b0624bb0b558008cb8370, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224053898802661156, guid: b6a385f9c12b0624bb0b558008cb8370,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 2.036003
+      objectReference: {fileID: 0}
+    - target: {fileID: 224366409090387808, guid: b6a385f9c12b0624bb0b558008cb8370,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058176689605158, guid: b6a385f9c12b0624bb0b558008cb8370,
+        type: 2}
+      propertyPath: from.x
+      value: 1200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058176689605158, guid: b6a385f9c12b0624bb0b558008cb8370,
+        type: 2}
+      propertyPath: to.x
+      value: -1200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b6a385f9c12b0624bb0b558008cb8370, type: 2}
   m_IsPrefabParent: 0
@@ -413,6 +437,16 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 223127646933809228, guid: 582517c002bccbb4ead67ce24d9acba7,
+        type: 2}
+      propertyPath: m_PixelPerfect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224569754889716336, guid: 582517c002bccbb4ead67ce24d9acba7,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 1200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 582517c002bccbb4ead67ce24d9acba7, type: 2}
@@ -829,9 +863,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d667a5dee9d237649a989df788227ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  from: {x: 850, y: 0, z: 0}
+  from: {x: 1200, y: 0, z: 0}
   center: {x: 0, y: 0, z: 0}
-  to: {x: -850, y: 0, z: 0}
+  to: {x: -1200, y: 0, z: 0}
   frames: 30
 --- !u!1 &1572795923
 GameObject:

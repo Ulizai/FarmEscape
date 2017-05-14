@@ -12,13 +12,16 @@ public class LoadLevel : MonoBehaviour {
 
     public void LoadSelectedLevel()
     {
-        FindObjectOfType<SelectMenu>().Disappear();
-        FindObjectOfType<PauseMenu>().Disappear();
-        Pause pause = FindObjectOfType<Pause>();
-        if (pause)
+        if (GetComponentInChildren<UnityEngine.UI.Text>()) ///If not locked
         {
-            pause.UnPause();
+            FindObjectOfType<SelectMenu>().Disappear();
+            FindObjectOfType<PauseMenu>().Disappear();
+            Pause pause = FindObjectOfType<Pause>();
+            if (pause)
+            {
+                pause.UnPause();
+            }
+            ftb.StartFade(() => UnityEngine.SceneManagement.SceneManager.LoadScene(gameObject.name));
         }
-        ftb.StartFade(() => UnityEngine.SceneManagement.SceneManager.LoadScene(gameObject.name));
     }
 }

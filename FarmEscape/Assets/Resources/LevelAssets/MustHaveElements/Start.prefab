@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4036920994208180}
   - component: {fileID: 114354714340460490}
+  - component: {fileID: 114519902247179722}
   m_Layer: 0
   m_Name: Start
   m_TagString: Untagged
@@ -140,3 +141,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnOffset: 10
+--- !u!114 &114519902247179722
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1445535438834750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e35db4e4e58b9843b1688ed1105a7a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
